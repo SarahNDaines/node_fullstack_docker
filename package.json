@@ -1,0 +1,16 @@
+{
+  "name": "node_gpo",
+  "version": "1.0.0",
+  "description": "gpo manager backend api in node.js",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0",
+    "pg": "^8.13.0"
+  }
+}
