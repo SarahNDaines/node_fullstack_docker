@@ -1,18 +1,24 @@
 version: '3'
 services:
   app:
-    build: .
+    build: ./backend
     ports:
-      - "3000:3000"
+      - "5000:3000" # Node.js backend runs on port 3000 internally but is accessible on port 5000 externally
     depends_on:
       db:
         condition: service_healthy
+  frontend:
+    build: ./frontend
+    ports:
+      - "8100:8100" # Ionic frontend runs on port 8100
+    depends_on:
+      - app
   db:
     image: postgres
     environment:
       POSTGRES_PASSWORD: password
     volumes:
-      - ./src/config/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/src/config/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     healthcheck:
