@@ -28,7 +28,7 @@ const startServer = () => {
   fs.readdirSync(routesPath).forEach((file) => {
     if (file !== 'index.js') {
       const route = require(path.join(routesPath, file));
-      app.use(`/api/${file.replace('.js', '')}`, route);
+      app.use('/api', route); // Use the route as defined in the file
     }
   });
 
