@@ -14,3 +14,13 @@ project-name/
 ├── .gitignore               # Files to ignore in version control 
 ├── package.json             # Project metadata and dependencies
 ├── README.md                # Project documentation 
+
+run docker containers for dev
+
+sudo docker-compose -f docker-compose.dev.yml up --build
+
+
+
+run docker containers for prod
+
+sudo docker-compose up --build

@@ -1,16 +1,10 @@
 const express = require('express');
-const { Pool } = require('pg');
+const pool = require('./config/database');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const port = 3000;
-
-const pool = new Pool({
-  user: 'postgres',
-  host: 'db',
-  database: 'mydatabase',
-  password: 'password',
-  port: 5432,
-});
 
 const connectWithRetry = () => {
   pool.connect((err) => {
@@ -25,15 +19,17 @@ const connectWithRetry = () => {
 };
 
 const startServer = () => {
-  app.get('/', (req, res) => {
-    pool.query('SELECT * FROM mytable', (err, result) => {
-      if (err) {
-        console.error('Query failed:', err);
-        res.status(500).send('Internal Server Error');
-      } else {
-        res.send(result.rows);
-      }
-    });
+  // Use the index route for the base /api path
+  const indexRoute = require('./routes/index');
+  app.use('/api', indexRoute);
+
+  // Dynamically load all other routes
+  const routesPath = path.join(__dirname, 'routes');
+  fs.readdirSync(routesPath).forEach((file) => {
+    if (file !== 'index.js') {
+      const route = require(path.join(routesPath, file));
+      app.use(`/api/${file.replace('.js', '')}`, route);
+    }
   });
 
   app.listen(port, () => {

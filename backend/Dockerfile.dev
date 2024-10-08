@@ -1,0 +1,21 @@
+# Dockerfile.dev
+FROM node:20
+WORKDIR /usr/src/app
+
+# Install nodemon globally
+RUN npm install -g nodemon
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the project files
+COPY . .
+
+# Expose the application port
+EXPOSE 3000
+
+# Start the application with nodemon
+CMD ["nodemon", "src/app.js"]
