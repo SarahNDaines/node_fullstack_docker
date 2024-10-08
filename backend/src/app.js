@@ -1,10 +1,13 @@
 const express = require('express');
+const cors = require('cors'); // Import CORS package
 const pool = require('./config/database');
 const fs = require('fs');
 const path = require('path');
 
 const app = express();
 const port = 3000;
+
+app.use(cors()); // Use CORS middleware
 
 const connectWithRetry = () => {
   pool.connect((err) => {
