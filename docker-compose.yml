@@ -4,6 +4,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - ./shared:/usr/src/shared
     ports:
       - "5000:3000"
     depends_on:
@@ -11,6 +13,8 @@ services:
         condition: service_healthy
   frontend:
     build: ./frontend
+    volumes:
+      - ./shared:/app/shared
     ports:
       - "8100:8100"
     depends_on:

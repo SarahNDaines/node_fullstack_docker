@@ -1,16 +1,17 @@
-const express = require('express');
-const cors = require('cors'); // Import CORS package
-const pool = require('./config/database');
-const fs = require('fs');
-const path = require('path');
+import express, { Request, Response } from 'express';
+import cors from 'cors'; // Import CORS package
+import pool from './config/database';
+import fs from 'fs';
+import path from 'path';
 
 const app = express();
 const port = 3000;
 
 app.use(cors()); // Use CORS middleware
+app.use(express.json()); // Enable JSON body parsing
 
 const connectWithRetry = () => {
-  pool.connect((err) => {
+  pool.connect((err: Error | undefined) => {
     if (err) {
       console.error('Failed to connect to database, retrying in 5 seconds...', err);
       setTimeout(connectWithRetry, 5000);
@@ -23,15 +24,17 @@ const connectWithRetry = () => {
 
 const startServer = () => {
   // Use the index route for the base /api path
-  const indexRoute = require('./routes/index');
-  app.use('/api', indexRoute);
+  import('./routes/index').then(indexRoute => {
+    app.use('/api', indexRoute.default);
+  });
 
   // Dynamically load all other routes
   const routesPath = path.join(__dirname, 'routes');
   fs.readdirSync(routesPath).forEach((file) => {
-    if (file !== 'index.js') {
-      const route = require(path.join(routesPath, file));
-      app.use('/api', route); // Use the route as defined in the file
+    if (file !== 'index.ts') {
+      import(path.join(routesPath, file)).then(route => {
+        app.use('/api', route.default); // Use the route as defined in the file
+      });
     }
   });
 

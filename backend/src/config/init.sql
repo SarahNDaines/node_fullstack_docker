@@ -1,5 +1,5 @@
-CREATE DATABASE mydatabase;
-\c mydatabase
+DROP TABLE IF EXISTS contacts;
+
 CREATE TABLE contacts (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100)

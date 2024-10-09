@@ -7,6 +7,7 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
+      - ./shared:/usr/src/shared
     ports:
       - "5000:3000"
     depends_on:
@@ -19,6 +20,7 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+      - ./shared:/app/shared
     ports:
       - "8100:8100"
     depends_on:

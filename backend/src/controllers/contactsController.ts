@@ -1,8 +1,9 @@
-const Contact = require("../models/contact");
+import { Request, Response } from 'express';
+import { getContactById, getAllContacts } from '../db/ContactQueries';
 
-const getContacts = async (req, res) => {
+export const getContactsHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    const data = await Contact.getAll();
+    const data = await getAllContacts();
     res.send(data);
   } catch (err) {
     console.error('Query failed:', err);
@@ -10,10 +11,10 @@ const getContacts = async (req, res) => {
   }
 };
 
-const getContactByID = async (req, res) => {
+export const getContactByIDHandler = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   try {
-    const data = await Contact.getById(id);
+    const data = await getContactById(id);
     if (data) {
       res.send(data);
     } else {
@@ -24,5 +25,3 @@ const getContactByID = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-
-module.exports = { getContacts, getContactByID };
